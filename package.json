@@ -1,5 +1,5 @@
 {
-  "name": "graphify",
+  "name": "graphify-node",
   "version": "1.0.0",
   "description": "Layout tool for KLay graphs.",
   "main": "src/api.js",

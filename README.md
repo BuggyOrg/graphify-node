@@ -10,7 +10,7 @@ sizes and positions of every node.
 You can install graphify via npm:
 
 ```
-npm install graphify
+npm install graphify-node
 ```
 
 ## API
@@ -18,7 +18,7 @@ npm install graphify
 The API consists of one method `layout` that will create a layouted Klay JSON Graph.
 
 ```
-const graphify = require('graphify')
+const graphify = require('graphify-node')
 
 // ...
 
