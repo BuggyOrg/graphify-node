@@ -1,0 +1,21 @@
+{
+  "name": "graphify",
+  "version": "1.0.0",
+  "description": "Layout tool for KLay graphs.",
+  "main": "src/api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "graph",
+    "klay",
+    "layout"
+  ],
+  "author": "Maximilian Klein",
+  "license": "MIT",
+  "dependencies": {
+    "function-cache": "^1.0.3",
+    "klayjs": "^0.4.1",
+    "lodash": "^4.17.2"
+  }
+}
