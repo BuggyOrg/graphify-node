@@ -1,6 +1,6 @@
 const defaults = require('lodash/defaults')
 const zip = require('lodash/zip')
-const klayjs = require('klayjs')
+const elkjs = require('elkjs/lib/elk.bundled')
 const Graph = require('./graph')
 
 const defaultOptions = {
@@ -70,14 +70,10 @@ module.exports = {
     var graph = (typeof (input) === 'string') ? JSON.parse(input) : JSON.parse(JSON.stringify(input))
 
     return measureGraph(graph, options.measure, textMeasure)
-    .then((graph) => new Promise((resolve, reject) => {
-      klayjs.layout({
-        graph: graph,
-        options: options.klay,
-        success: resolve,
-        error: reject
-      })
-    }))
+    .then((graph) => {
+      const elk = new elkjs(options.elk)
+      return elk.layout(graph)
+    })
   },
 
   defaults: defaultOptions,
@@ -89,17 +85,17 @@ module.exports = {
       font: 'sans-serif',
       padding: {}
     },
-    klay: {
-      spacing: 3,
-      layoutHierarchy: true,
-      direction: 'DOWN',
-      borderSpacing: 2,
-      edgeRouting: 'ORTHOGONAL',
-      nodeLayering: 'NETWORK_SIMPLEX',
-      nodePlace: 'BRANDES_KOEPF',
-      fixedAlignment: 'NONE',
-      crossMin: 'LAYER_SWEEP',
-      algorithm: 'de.cau.cs.kieler.klay.layered'
+    elk: {
+      'elk.spacing.nodeNode': 3,
+      'elk.layoutHierarchy': true,
+      'elk.direction': 'DOWN',
+      'elk.spacing.componentComponent': 2,
+      'elk.edgeRouting': 'ORTHOGONAL',
+      'elk.layered.layering.strategy': 'NETWORK_SIMPLEX',
+      'elk.layered.nodePlacement.strategy': 'BRANDES_KOEPF',
+      'elk.layered.nodePlacement.bk.fixedAlignment': 'NONE',
+      'elk.layered.crossingMinimization.strategy': 'LAYER_SWEEP',
+      'elk.algorithm': 'layered'
     }
   }
 }
