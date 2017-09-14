@@ -1,6 +1,6 @@
 # Graphify
 
-Create an graph layout for [Klay JSON Graphs](https://rtsys.informatik.uni-kiel.de/confluence/display/KIELER/JSON+Graph+Format).
+Create an graph layout for [ELK Graphs](http://www.eclipse.org/elk/documentation/tooldevelopers/graphdatastructure/jsonformat.html).
 
 This package itself will not create images of the graphs. It will only add information about the
 sizes and positions of every node.

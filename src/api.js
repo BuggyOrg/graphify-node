@@ -1,6 +1,6 @@
 const defaults = require('lodash/defaults')
 const zip = require('lodash/zip')
-const elkjs = require('elkjs/lib/elk.bundled')
+const Elk = require('elkjs/lib/elk.bundled')
 const Graph = require('./graph')
 
 const defaultOptions = {
@@ -17,16 +17,19 @@ const defaultOptions = {
       bottom: 10
     }
   },
-  klay: {
-    spacing: 50,
-    layoutHierarchy: true,
-    direction: 'DOWN',
-    edgeRouting: 'ORTHOGONAL',
-    nodeLayering: 'NETWORK_SIMPLEX',
-    nodePlace: 'BRANDES_KOEPF',
-    fixedAlignment: 'NONE',
-    crossMin: 'LAYER_SWEEP',
-    algorithm: 'de.cau.cs.kieler.klay.layered'
+  elk: {
+    'elk.layoutHierarchy': true,
+    'elk.direction': 'DOWN',
+    'elk.spacing.componentComponent': 15,
+    'elk.spacing.edgeNode': 15,
+    'elk.spacing.nodeNode': 15,
+    'elk.edgeRouting': 'ORTHOGONAL',
+    'elk.layered.layering.strategy': 'NETWORK_SIMPLEX',
+    'elk.layered.nodePlacement.strategy': 'BRANDES_KOEPF',
+    'elk.layered.nodePlacement.bk.fixedAlignment': 'NONE',
+    'elk.layered.crossingMinimization.strategy': 'LAYER_SWEEP',
+    'elk.algorithm': 'layered',
+    'elk.padding': 'left=20,right=20,top=20,bottom=20' // parsed by https://github.com/eclipse/elk/blob/fa1b0f74faf09c80a9d4839cb30a8cc429b67ad9/plugins/org.eclipse.elk.core/src/org/eclipse/elk/core/math/Spacing.java#L216
   }
 }
 
@@ -34,7 +37,7 @@ function monospace (str, style) {
   return {width: str.length, height: str.split('\n').length}
 }
 
-function measureTexts (node, style, measureText) {
+function measureTexts (node, style, measureText = monospace) {
   if (Array.isArray(node)) return Promise.all(node.map((n) => measureTexts(n, style, measureText)))
   return Promise.resolve(measureText(node.text, style))
 }
@@ -57,7 +60,7 @@ function measureGraph (graph, options, measureText) {
     p.height = options.portSize
   })
   // set text of nodes
-  Graph.getNodes(graph).forEach((n) => n.text = (n.labels || [{}])[0].text || '')
+  Graph.getNodes(graph).forEach((n) => { n.text = (n.labels || [{}])[0].text || '' })
 
   return layoutNodes(Graph.getNodes(graph), options, measureText)
   .then(() => graph)
@@ -71,7 +74,7 @@ module.exports = {
 
     return measureGraph(graph, options.measure, textMeasure)
     .then((graph) => {
-      const elk = new elkjs(options.elk)
+      const elk = new Elk({ defaultLayoutOptions: options.elk })
       return elk.layout(graph)
     })
   },
@@ -95,7 +98,8 @@ module.exports = {
       'elk.layered.nodePlacement.strategy': 'BRANDES_KOEPF',
       'elk.layered.nodePlacement.bk.fixedAlignment': 'NONE',
       'elk.layered.crossingMinimization.strategy': 'LAYER_SWEEP',
-      'elk.algorithm': 'layered'
+      'elk.algorithm': 'layered',
+      'elk.padding': 'left=1,right=1,top=1,bottom=1' // parsed by https://github.com/eclipse/elk/blob/fa1b0f74faf09c80a9d4839cb30a8cc429b67ad9/plugins/org.eclipse.elk.core/src/org/eclipse/elk/core/math/Spacing.java#L216
     }
   }
 }
